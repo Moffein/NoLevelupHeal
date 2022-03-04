@@ -5,11 +5,18 @@ using UnityEngine;
 
 namespace NoLevelupHeal
 {
-    [BepInPlugin("com.Moffein.NoLevelupHeal", "No Levelup Heal", "1.0.3")]
+    [BepInPlugin("com.Moffein.NoLevelupHeal", "No Levelup Heal", "1.0.4")]
     public class NoLevelupHeal : BaseUnityPlugin
     {
+        //public static BodyIndex SuperRoboBallBossBodyIndex;
         public void Awake()
         {
+            /*On.RoR2.BodyCatalog.Init += (orig) =>
+            {
+                orig();
+                SuperRoboBallBossBodyIndex = BodyCatalog.FindBodyIndex("SuperRoboBallBossBody");
+            };*/
+
             On.RoR2.CharacterBody.RecalculateStats += (orig, self) =>
             {
                 float oldLevel = self.level;
@@ -18,32 +25,25 @@ namespace NoLevelupHeal
                 orig(self);
                 if (self.level > oldLevel)
                 {
-                    if (self.teamComponent.teamIndex == TeamIndex.Monster && self.healthComponent.combinedHealthFraction < 1f)
+                    if (self.teamComponent.teamIndex != TeamIndex.Player && self.healthComponent.combinedHealthFraction < 1f)
                     {
-                        self.healthComponent.health = oldHP;
-                        if (self.baseNameToken != "SUPERROBOBALLBOSS_BODY_NAME")
+                        if (self.healthComponent.health > oldHP)
+                        {
+                            self.healthComponent.health = oldHP;
+                        }
+
+                        if (self.healthComponent.shield > oldShield)
                         {
                             self.healthComponent.shield = oldShield;
                         }
+
+                        /*if (self.bodyIndex != SuperRoboBallBossBodyIndex)
+                        {
+                            self.healthComponent.shield = oldShield;
+                        }*/
                     }
                 }
             };
         }
-    }
-}
-
-namespace R2API.Utils
-{
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class ManualNetworkRegistrationAttribute : Attribute
-    {
-    }
-}
-
-namespace EnigmaticThunder
-{
-    [AttributeUsage(AttributeTargets.Assembly)]
-    public class ManualNetworkRegistrationAttribute : Attribute
-    {
     }
 }
