@@ -3,9 +3,17 @@ using RoR2;
 using System;
 using UnityEngine;
 
+namespace R2API.Utils
+{
+    [AttributeUsage(AttributeTargets.Assembly)]
+    public class ManualNetworkRegistrationAttribute : Attribute
+    {
+    }
+}
+
 namespace NoLevelupHeal
 {
-    [BepInPlugin("com.Moffein.NoLevelupHeal", "No Levelup Heal", "1.0.4")]
+    [BepInPlugin("com.Moffein.NoLevelupHeal", "No Levelup Heal", "1.0.5")]
     public class NoLevelupHeal : BaseUnityPlugin
     {
         //public static BodyIndex SuperRoboBallBossBodyIndex;
